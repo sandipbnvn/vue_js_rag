@@ -59,14 +59,14 @@
                     <div class="conversation-header">
                       <div class="conversation-id">
                         <i class="fas fa-comments me-2"></i>
-                        {{ conversation.conversation_id.substring(0, 8) }}...
+                        {{ conversation.conversation_id ? conversation.conversation_id.substring(0, 8) + '...' : 'N/A' }}
                       </div>
                       <div class="conversation-date">
-                        {{ formatDate(conversation.last_updated) }}
+                        {{ formatDate(conversation.updated_at) }}
                       </div>
                     </div>
                     <div class="conversation-preview">
-                      {{ conversation.preview }}
+                      {{ conversation.first_query || 'No preview available' }}
                     </div>
                   </div>
                   <div class="conversation-actions">
@@ -200,7 +200,7 @@ export default {
       isLoading.value = true
       try {
         const data = await apiService.getAllConversations()
-        conversations.value = data
+        conversations.value = data.conversations || []
       } catch (error) {
         console.error('Error loading conversations:', error)
       } finally {
